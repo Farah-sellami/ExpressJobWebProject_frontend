@@ -15,6 +15,7 @@ function ListServicesComponent() {
     const [servicesPerPage] = useState(5);  // Nombre de services par page
     const [categories, setCategories] = useState([]); // Liste des catégories
     const [selectedCategory, setSelectedCategory] = useState(''); // Catégorie sélectionnée
+      // Gestion des modals
     const [showModal, setShowModal] = useState(false); // État pour afficher ou cacher le modal
     const [showProfessionalModal, setShowProfessionalModal] = useState(false); 
     const [selectedService, setSelectedService] = useState(null); // État pour l'service sélectionné
@@ -24,12 +25,24 @@ function ListServicesComponent() {
     const indexOfFirstService = indexOfLastService - servicesPerPage;
     const currentServices = services.slice(indexOfFirstService, indexOfLastService);
   
+    const navigate = useNavigate();
   
-    const handleServiceClick = (service) => {
-      setSelectedService(service); // Stocke le service sélectionné
-     setProfessionals(service.professionnels || []); // Met à jour les professionnels associés au service
-     setShowProfessionalModal(true); // Ouvre la modal
-   };
+      const handleServiceClick = async (service) => {
+    try {
+      // Stocke le service sélectionné
+      setSelectedService(service);
+
+      // Appelle l'API pour récupérer les professionnels
+      const data = await serviceService.getProfessionalsByService(service.id);
+      setProfessionals(data); // Met à jour les professionnels récupérés
+
+      // Ouvre la modal
+      setShowProfessionalModal(true);
+    } catch (error) {
+      console.error("Erreur lors de la récupération des professionnels :", error);
+      alert("Impossible de récupérer les professionnels pour ce service.");
+    }
+  };
   
     const handleDeleteClick = (service) => {
       console.log('Service sélectionné:', service);
@@ -76,7 +89,7 @@ function ListServicesComponent() {
       fetchCategories();
     }, []);
   
-    const navigate = useNavigate();
+  
     const handleAddService = () => {
       navigate('/AjoutService'); // Chemin vers votre composant AddService
     };
@@ -205,7 +218,7 @@ function ListServicesComponent() {
                              <th>serviceID</th>
                              <th>Titre</th>
                              <th>Description</th>
-                
+                             <th>Date creation</th>
                              <th>Categorie</th>
                              {/* <th>Professionnels</th> */}
                              <th>Actions</th>
@@ -217,6 +230,7 @@ function ListServicesComponent() {
                               <td>{service.id}</td>
                               <td>{service.Titre}</td>
                               <td>{service.Description}</td>
+                              <td>{service.DateCreation}</td>
                               <td>{service.categorie ? service.categorie.Titre : 'Non défini'}</td>
                               {/* <td>
                                 {service.professionnels && service.professionnels.length > 0 ? (
@@ -276,7 +290,8 @@ function ListServicesComponent() {
                           <tr>
                           <th>serviceID</th>
                             <th>Titre</th>
-                            <th>Description</th>                            
+                            <th>Description</th> 
+                            <th>Date Creation</th>                           
                             <th>Catégorie</th>
                             <th>Actions</th>
                           </tr>

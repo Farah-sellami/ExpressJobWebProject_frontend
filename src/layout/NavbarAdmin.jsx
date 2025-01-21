@@ -126,14 +126,25 @@ function NavbarAdmin() {
          
           </li>
           <li className="nav-item dropdown">
-            <a className="nav-link py-0 d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <img src="../assets/images/avatars/01.png" alt="User-Profile" className="theme-color-default-img img-fluid avatar avatar-50 avatar-rounded"/>
-              <img src={user.avatar} alt="User-Profile" className="theme-color-purple-img img-fluid avatar avatar-50 avatar-rounded"/>
-              <div className="caption ms-3 d-none d-md-block">
-                  <h6 className="mb-0 caption-title"> {user.name}</h6>
-                
-              </div>
-            </a>
+          <a
+    className="nav-link py-0 d-flex align-items-center"
+    href="#"
+    id="navbarDropdown"
+    role="button"
+    data-bs-toggle="dropdown"
+    aria-expanded="false"
+  >
+    {/* Affichage de l'image utilisateur */}
+    <img
+      src={user.avatar}
+      alt="User-Profile"
+      className="img-fluid avatar avatar-50 avatar-rounded"
+    />
+    {/* Affichage du nom de l'utilisateur */}
+    <div className="caption ms-3 d-none d-md-block">
+      <h6 className="mb-0 caption-title">{user.name}</h6>
+    </div>
+  </a>
             <ul className="dropdown-menu shadow dropdown-menu-end" aria-labelledby="navbarDropdown">
 
               <li>

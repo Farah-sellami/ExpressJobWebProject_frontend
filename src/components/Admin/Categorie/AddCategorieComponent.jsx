@@ -12,7 +12,7 @@ function AddCategorieComponent() {
   });
 
   const navigate = useNavigate();
-
+  const [error, setError] = useState(null); 
   // Gestion des champs texte
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -26,24 +26,36 @@ function AddCategorieComponent() {
 
   const handleSubmit = async (e) => {
     e.preventDefault(); // Empêche le rechargement de la page
+    setError(null); // Réinitialiser l'erreur
+
+    // Vérification de l'existence du titre
+    if (!categorie.Titre) {
+      setError("Le titre existe déja !");
+      return;
+    }
     try {
       // Construction de FormData
       const formData = new FormData();
       formData.append("Titre", categorie.Titre);
-      formData.append("Description", categorie.Description);
+      formData.append("Description", categorie.Description || "");
       if (categorie.image) {
         formData.append("image", categorie.image);
       }
 
       // Appel à l'API
       const response = await categorieService.createCategorie(formData);
-      console.log(response);
+      console.log('Réponse de l\'API : ', response);
       alert("Catégorie créée avec succès !");
       navigate("/ListCategories");
+      
       // Réinitialise les champs
       setCategorie({ Titre: "", Description: "", image: null });
     } catch (error) {
       alert("Erreur lors de la création de la catégorie : " + error.message);
+      // Gestion des erreurs
+    const errorMessage = error.response?.data?.message || error.message || "Erreur inconnue";
+    setError(`Erreur lors de la création de la catégorie : ${errorMessage}`);
+    alert(`Erreur lors de la création de la catégorie : ${errorMessage}`);
     }
   };
 

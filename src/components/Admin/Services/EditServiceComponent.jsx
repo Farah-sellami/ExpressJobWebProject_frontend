@@ -13,6 +13,7 @@ function EditServiceComponent() {
         Titre: "",
         Description: "",
         categorie_id: "",
+        categorie: {} 
       });
       const [isSubmitting, setIsSubmitting] = useState(false);
       const { id } = useParams(); // Récupérer l'ID du service depuis l'URL
@@ -51,6 +52,7 @@ function EditServiceComponent() {
                 Titre: response.Titre,
                 Description: response.Description,
                 categorie_id: response.categorie_id,
+                categorie: response.categorie || {} 
               });
             } else {
               setError("service non trouvée.");
@@ -78,10 +80,16 @@ function EditServiceComponent() {
         e.preventDefault();
         setIsSubmitting(true);
     
+         // Vérifier si tous les champs nécessaires sont remplis
+    if (!serviceData.Titre || !serviceData.Description || !serviceData.categorie_id) {
+      setError("Veuillez remplir tous les champs.");
+      setIsSubmitting(false);
+      return;
+    } 
         try {
           await serviceService.updateService(serviceData.id, serviceData);
           alert("Service mis à jour avec succès !");
-          navigate("/services"); // Rediriger vers la liste des services
+          navigate("/ListServices"); // Rediriger vers la liste des services
         } catch (error) {
           console.error("Erreur lors de la mise à jour du service:", error);
           alert("Une erreur est survenue.");
@@ -167,8 +175,8 @@ function EditServiceComponent() {
                         {categories.length > 0 ? (
                             categories.map((category) => (
                               <option
-                                key={category.categorie_id}
-                                value={category.categorie_id}
+                                key={category.id}
+                                value={category.id}
                               >
                                 {category.Titre}
                               </option>

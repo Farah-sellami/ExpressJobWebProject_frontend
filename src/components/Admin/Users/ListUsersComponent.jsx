@@ -122,8 +122,8 @@ function ListUsersComponent() {
                                   currentUsers.map((user) => (
                                      <tr key={user.id}>
                                         <td className="text-center">
-                                           {user.photoProfile ? (
-                                              <img src={user.photoProfile} className="bg-primary-subtle rounded img-fluid avatar-40 me-3" alt="profile" />
+                                           {user.avatar ? (
+                                              <img src={user.avatar} className="bg-primary-subtle rounded img-fluid avatar-40 me-3" alt="profile" />
                                            ) : (
                                               'Pas de photo'
                                            )}

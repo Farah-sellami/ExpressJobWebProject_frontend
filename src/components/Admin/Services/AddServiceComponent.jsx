@@ -41,16 +41,15 @@ function AddServiceComponent() {
         try {
           const serviceData = {
             ...formData,
-            categorie_id: parseInt(formData.categorie_id, 10), // Assurez-vous que l'ID de catégorie est un entier
+            categorie_id: parseInt(formData.categorie_id, 10),
           };
           const response = await serviceService.createService(serviceData);
           console.log("Service créé avec succès :", response);
           alert("Le service a été créé avec succès !");
-          navigate("/services"); // Redirige vers la page des services
+          navigate("/ListServices"); // Redirige vers la page des services
           setFormData({
             Titre: "",
             Description: "",
-            price: "",
             categorie_id: "",
           });
         } catch (error) {
@@ -140,7 +139,7 @@ function AddServiceComponent() {
                           >
                             <option value="">Sélectionnez une catégorie</option>
                             {categories.map((category) => (
-                              <option key={category.categorie_id} value={category.categorie_id}>
+                              <option key={category.categorie_id} value={category.id}>
                                 {category.Titre}
                               </option>
                             ))}
@@ -159,7 +158,8 @@ function AddServiceComponent() {
                             type="reset"
                             className="btn btn-danger"
                             onClick={() =>
-                              setFormData({ Titre: "", Description: "", price: "", categorie_id: "" })
+                              setFormData({ Titre: "", Description: "", categorie_id: "" })
+                              
                             }
                           >
                             
